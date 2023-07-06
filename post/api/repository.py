@@ -25,6 +25,7 @@ class PostRepository:
     def get_post(post_id):
         post = Post.objects.get(id=post_id)
         return post
+
     @staticmethod
     def update_post(attrs, post_id):
         post = Post.objects.get(id=post_id)
@@ -35,7 +36,6 @@ class PostRepository:
         post.save()
         return post
 
-
     @staticmethod
     def delete_post(post_id):
         post = Post.objects.get(id=post_id)
@@ -43,6 +43,6 @@ class PostRepository:
         return True
 
     @staticmethod
-    def get_all_posts(user_id):
-        posts = Post.objects.filter(user_id = user_id)
+    def get_all_posts():
+        posts = Post.objects.all()
         return posts

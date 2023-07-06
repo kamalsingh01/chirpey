@@ -10,6 +10,13 @@ from user_app.api.controller import UserController
 from post.models import Post
 from .controller import PostController
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
 
 class AddPostView(GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -74,7 +81,8 @@ class PostView(GenericAPIView):
 class GetPostsView(GenericAPIView):
     permission_classes = [IsAuthenticated]
 
+    @method_decorator(cache_page(CACHE_TTL))
     def get(self, request, *args, **kwargs):
-        user_id = request.user.id
-        serializer = PostResponseSerializer(PostController.get_all_posts(user_id), many=True)
+        user_id =  request.user.id
+        serializer = PostResponseSerializer(PostController.get_all_posts(), many=True)
         return response.Response(serializer.data)

@@ -32,10 +32,6 @@ class PostController:
 
 
     @staticmethod
-    def get_all_posts(user_id):
-        try:
-            user = UserModel.objects.get(id=user_id)
-            response = PostRepository.get_all_posts(user_id)
-            return response
-        except UserModel.DoesNotExist:
-            raise serializers.ValidationError({"error": "User doesn't exist"})
+    def get_all_posts():
+        response = PostRepository.get_all_posts()
+        return response
