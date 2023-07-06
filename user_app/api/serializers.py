@@ -13,7 +13,7 @@ class CreateUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=50, required=True)
     last_name = serializers.CharField(max_length=50, required=True)
     username = serializers.CharField(max_length=20, required=True)
-    email = serializers.CharField(max_length=20, required=True)
+    email = serializers.CharField(max_length=50, required=True)
     bio = serializers.CharField(max_length=100, required=False)
     password = serializers.CharField(
         style={
@@ -40,7 +40,7 @@ class UpdateUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=50, required = False)
     last_name = serializers.CharField(max_length=50, required = False)
     username = serializers.CharField(max_length=20, required=False)
-    email = serializers.CharField(max_length=20, required=False)
+    email = serializers.CharField(max_length=50, required=False)
     bio = serializers.CharField(max_length=100, required=False)
     profile_image = serializers.ImageField(required=False)
     password = serializers.CharField(

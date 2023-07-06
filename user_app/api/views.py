@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.generics import GenericAPIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, BlacklistedToken, BlacklistMixin
 
 from .serializers import (UserResponseSerializer,
                           CreateUserSerializer,
@@ -33,8 +33,6 @@ class UserView(GenericAPIView):
             return CreateUserSerializer
         if self.request.method == 'PATCH':
             return UpdateUserSerializer
-        if self.request.method == 'GET':
-            return UserResponseSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -49,17 +47,28 @@ class UserView(GenericAPIView):
 
     def patch(self, request, *args, **kwargs):
         user_id = request.user.id
-        serializer = self.get_serializer(data = request.data, context = {'user_id':user_id})
+        serializer = self.get_serializer(data=request.data, context={'user_id': user_id})
         serializer.is_valid(raise_exception=True)
         return response.Response(
             {
-                "msg":" User updated successfully",
+                "msg": " User updated successfully",
                 **serializer.validated_data,
             },
             status=status.HTTP_202_ACCEPTED
         )
 
 
+class GetUserView(GenericAPIView):
+    serializer_class = UserResponseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.id
+        user_email = request.user.email
+        print(user_id, user_email)
+        user = UserController.get_user(user_email, user_id)
+        serializer = self.get_serializer(user)
+        return response.Response(serializer.data)
 
 class UserLoginView(GenericAPIView):
     serializer_class = UserLoginSerializer
@@ -76,7 +85,7 @@ class UserLoginView(GenericAPIView):
         )
 
 
-class LogoutView(GenericAPIView):
+class UserLogoutView(GenericAPIView):
     authentication_classes = [JWTAuthentication]
 
     def post(self, request):

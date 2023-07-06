@@ -15,7 +15,7 @@ class UserModel(AbstractUser):
     email = models.EmailField(max_length=100, unique=True, blank=False)
     bio = models.CharField(max_length=100, null=True, blank=True)
     password = models.CharField()
-    profile_image = models.ImageField(null=True)
+    profile_image = models.ImageField(upload_to="user/", null=True)
 
     REQUIRED_FIELDS = ['first_name',
                        'last_name',

@@ -28,9 +28,15 @@ class UserController:
             raise serializers.ValidationError({"error": "User already Exists"})
 
     @staticmethod
-    def get_user(email):
+    def get_user(email, user_id = None):
         try:
-            response = UserRepository.get_user(email)
+            if user_id:
+                response = UserRepository.get_user(email, user_id)
+            else:
+                try:
+                    response = UserRepository.get_user(email, user_id)
+                except Exception as e:
+                    raise serializers.ValidationError({"error": "User not authorised"})
             return response
         except UserModel.DoesNotExist:
             raise serializers.ValidationError({"error": "User Doesn't Exist"})

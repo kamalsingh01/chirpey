@@ -23,8 +23,8 @@ class UserRepository:
         user.bio = attrs.get('bio', user.bio)
         user.profile_image = attrs.get('profile_image', user.profile_image)
 
-        password = attrs['password']
-        if password:
+        if 'password' in attrs:
+            password = attrs['password']
             user.set_password(password)
         user.save()
         # again returning new refresh token so that user stays logged in
@@ -39,5 +39,8 @@ class UserRepository:
         }
 
     @staticmethod
-    def get_user(email):
-        return UserModel.objects.get(email=email)
+    def get_user(email, user_id=None):
+        if user_id:
+            return UserModel.objects.get(email=email, id = user_id)
+        else:
+            return UserModel.objects.get(email=email)
