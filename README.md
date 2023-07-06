@@ -133,7 +133,8 @@ python3 manage.py runserver
 - /api/posts/<inr:post_id> - post details are fetched using post_id, patch and delete request is also served
 - /api/posts/list/ - lists all posts on the platform
 
-- /swagger/ - to check for swagger documented APIs
+- /swagger/ - to check for swagger documented APIs with User Interface
+- /redoc/ - to check for swagger documented APIs with User Interface 
 
 ```
 - `/api/users/login/`, `/api/users/register/` do not require any authentication or authorisation, but 
